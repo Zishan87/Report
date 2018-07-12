@@ -1,0 +1,7 @@
+pymssql
+pandas
+numpy
+openpyxl
+jinja2
+pdfkit
+flask
