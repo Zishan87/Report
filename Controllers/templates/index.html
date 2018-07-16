@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <table align="center">
+            <caption><h1>Hotel Sales Report</h1></caption>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th align="left">
+                        Start Date
+                    </th>
+                    <th></th>
+                    <th align="left">
+                        End Date
+                    </th>
+                </tr>
+            </thead>
+            <tfoot>
+               <tr>
+                   <td></td>
+                   <td></td>
+                   <td></td>
+                   <td><button type="button" onclick="loadDoc()">Generate Report</button></td>
+               </tr>
+            </tfoot>
+            <tbody>
+                <tr>
+                    <td>Period1: </td>
+                    <td>
+                        <input id='id1' type="text" value="2017-08-01">
+                    </td>
+                    <td>
+                        to
+                    </td>
+                    <td>
+                        <input id="id2" type="text" value="2017-08-05">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Period2: </td>
+                    <td>
+                        <input id="id3" type="text" value="2018-08-01">
+                    </td>
+                    <td>
+                        to
+                    </td>
+                    <td>
+                        <input id="id4" type="text" value="2018-08-05">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+         <script src="api_call.js"></script>
+    </body>
+</html>

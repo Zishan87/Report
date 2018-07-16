@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>{{ title }}</title>
+    </head>
+    <body>
+        <div align="center">
+            <h2>Hotel Sales Report</h2>
+             {{ input_dataframe }}
+        </div>
+        <br><br>
+        <div align="center">
+            <button type="button" onclick="downloadExcel()">Download Report in Excel</button>
+            &emsp;
+            <button type="button" onclick="downloadPdf()">Download Report in Pdf</button>
+        </div>
+         <script src="http://localhost:63342/Report/Controllers/templates/api_call.js"></script>
+    </body>
+</html>
