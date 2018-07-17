@@ -5,26 +5,23 @@ script to generate excel and pdf report
 
 Step 1: Reading date constraint from user (Writing GET API with query string)
 
-Step 2: As per date intervals for each date interval, I retrieved records from table
-and created corresponding dataframe using 'pandas' library. As we have two date interval so we have two dataframe.
-(For now I used only one dataframe to show the report)
+Step 2: As per date intervals , I retrieved records from table
+and created corresponding dataframe using 'pandas' library.
 
-Step 3: Vertically we have to merge these two dataframe in a single dataframe (Probably 
-using pivoting or some other technique) 
+Step 3: Using Pivoting rearranged the dataframe for comparative analysis.
 
-Step 4: Using 'numpy' library we will do all report level aggregation(sum, mean, count, variance
-etc) as per business.
+Step 4: Added some more series to dataframe to calculate measures of analysis.
  
-Step 5: To render the report in the webpage. (For now I am showing the json output)
+Step 5: To render the report in the webpage.
 
         a) I have created a GET API
            http://localhost:5000/api/v1/innroad/report?date1=2018-01-08&date2=2018-03-08&oldDate1=2017-01-08&oldDate2=2017-03-08
            
-        b) We can use HTML template (pace_report.html) to render report.
+        b) By using HTML template (pace_report.html) with the help of 'jinja2' package, I am sinking report to render.
         
-        c) We can use 'jinja2' package to embed dataframe report to HTML template
+        c) Using Javascript o call the API rom browser.
         
-        d) We can also provide the appropriate styles to the template
+        d) I have also provided download buttons to download as an excel or pdf report.
         
 
 Step 6: To download the report in Excel format
@@ -37,12 +34,13 @@ Step 6: To download the report in Excel format
         c) Internally 'to_excel' method uses 'openpyxl' package to write the dataframe in excel.
            So, I have installed 'openpyxl' package but no need to import it.
            
+           
 Step 7: To download the report in pdf format
 
         a) I have created a GET API
            http://localhost:5000/api/v1/innroad/report/pdf?date1=2018-01-08&date2=2018-03-08&oldDate1=2017-01-08&oldDate2=2017-03-08
            
-        b) I have used HTML template (pace_report.html) to show the pdf report.
+        b) I have used HTML template (pdf_report.html) to show the pdf report.
         
         c) I have used 'jinja2' package to embed dataframe report to HTML template
         
@@ -68,8 +66,10 @@ To generate excel report 'pandas' is the best option which I have used here.
 
 ## Project Structure
 
-It is not the complete project structure, so ignore the incompleteness. It requires refactoring
-and lot of addition.
+Code is refactored. I have defined the appropriate user defined exception. For now I don't see any model to specify.
+I am also working on other ways to generate the report, once model is needed will provide that into the project.
+
+Frontend requires more changes.
 
 For understanding purpose:
 
@@ -81,4 +81,10 @@ connection using 'pymssql' package.
 
 general_config.ini contains database and all other general configuration apart from technical.
 
-I would add Models, User defined Exception code table, host environment and more.
+exception_code_table.py contains user defined exceptions, corresponding messages and error code.
+report_exception.py is the file to generate appropriate exceptions in the orm of json string.
+
+index.html is the user input page.
+pace_report.html is used to generate the report in the web browser.
+pdf_report.html is used to define pdf report template.
+api_call.js is a javascript file.

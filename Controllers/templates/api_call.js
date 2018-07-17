@@ -1,10 +1,10 @@
 var http = new XMLHttpRequest();
 function loadDoc() {
-var prevStartDate = document.getElementById('id1').value
-var prevEndDate = document.getElementById('id2').value
-var currentStartDate = document.getElementById('id3').value
-var currentEndDate = document.getElementById('id4').value
-var params = `date1=${currentStartDate}&date2=${currentEndDate}&oldDate1=${prevStartDate}&oldDate2=${prevEndDate}`;
+    var prevStartDate = document.getElementById('id1').value
+    var prevEndDate = document.getElementById('id2').value
+    var currentStartDate = document.getElementById('id3').value
+    var currentEndDate = document.getElementById('id4').value
+    var params = `date1=${currentStartDate}&date2=${currentEndDate}&oldDate1=${prevStartDate}&oldDate2=${prevEndDate}`;
 
     var url = "http://localhost:5000/api/v1/innroad/report";
     http.open("GET", url+"?"+params, true);

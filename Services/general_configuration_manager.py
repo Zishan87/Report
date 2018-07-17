@@ -1,4 +1,6 @@
 from configparser import ConfigParser
+from Services.report_exception import ReportException
+from Services.exception_code_table import *
 
 
 class GeneralConfigurationManager:
@@ -13,6 +15,6 @@ class GeneralConfigurationManager:
             for param in params:
                 db[param[0]] = param[1]
         else:
-            raise Exception('Section {0} not found in the {1} file'.format(section, filename))
+            raise ReportException(SECTION_NOT_FOUND)
 
         return db

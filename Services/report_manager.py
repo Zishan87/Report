@@ -6,6 +6,8 @@ import jsonpickle
 from jinja2 import Environment, FileSystemLoader
 
 from Services.database_manager import DatabaseManager
+from Services.exception_code_table import *
+from Services.report_exception import ReportException
 
 
 class ReportManager:
@@ -18,13 +20,22 @@ class ReportManager:
 
     def generating_dataframe(self):
         db_conn = DatabaseManager.db_connect()
-        cursor = db_conn.cursor()
+        try:
+            cursor = db_conn.cursor()
+            cursor.execute("SELECT *,YEAR(report_date) as year, DAY(report_date) as day FROM pace_report WHERE report_date > %s and report_date <= %s \
+            or report_date > %s and report_date <= %s order by report_date",
+                           (self.date1, self.date2, self.old_date1, self.old_date2))
 
-        cursor.execute("SELECT *,YEAR(report_date) as year, DAY(report_date) as day FROM pace_report WHERE report_date > %s and report_date <= %s \
-        or report_date > %s and report_date <= %s order by report_date",
-                       (self.date1, self.date2, self.old_date1, self.old_date2))
-        data = cursor.fetchall()
-        table_columns = [column[0] for column in cursor.description]
+            data = cursor.fetchall()
+
+            table_columns = [column[0] for column in cursor.description]
+            cursor.close()
+
+        except Exception:
+            raise ReportException(SERVER_IS_DOWN)
+        finally:
+            if db_conn is not None:
+                db_conn.close()
 
         df = pd.DataFrame(data)
 
@@ -40,6 +51,7 @@ class ReportManager:
 
     def report_in_html(self, template_name):
         df = self.generating_dataframe()
+
         env = Environment(loader=FileSystemLoader('./Controllers/templates'))
         template = env.get_template(template_name)
 
@@ -56,14 +68,14 @@ class ReportManager:
         df = self.generating_dataframe()
         df.to_excel('pace_report.xlsx', sheet_name='sheet1', index=True)
 
-        return jsonpickle.encode({'message': 'excel report download completed'},unpicklable=False)
+        return jsonpickle.encode({'message': 'excel report download completed'}, unpicklable=False)
 
     def pdf_report(self):
         html_out = self.report_in_html('pdf_report.html')
 
         pdfkit.from_string(html_out, 'pace_report.pdf', css="style.css")
 
-        return jsonpickle.encode({'message': 'pdf report download completed'},unpicklable=False)
+        return jsonpickle.encode({'message': 'pdf report download completed'}, unpicklable=False)
 
 
 
