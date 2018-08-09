@@ -4,6 +4,7 @@ import pdfkit
 import jsonpickle
 
 from jinja2 import Environment, FileSystemLoader
+# from IPython import embed
 
 from Services.database_manager import DatabaseManager
 from Services.exception_code_table import *
@@ -22,9 +23,9 @@ class ReportManager:
         db_conn = DatabaseManager.db_connect()
         try:
             cursor = db_conn.cursor()
-            cursor.execute("SELECT *,YEAR(report_date) as year, DAY(report_date) as day FROM pace_report WHERE report_date > %s and report_date <= %s \
-            or report_date > %s and report_date <= %s order by report_date",
-                           (self.date1, self.date2, self.old_date1, self.old_date2))
+            sql = "EXEC [dbo].[usp_Get_Report] @startDate = %s, @endDate = %s, @oldStartDate = %s, @oldEndDate = %s"
+
+            cursor.execute(sql, (self.date1, self.date2, self.old_date1, self.old_date2))
 
             data = cursor.fetchall()
 
@@ -46,7 +47,7 @@ class ReportManager:
         table['sold_difference'] = pd.Series(table[('sold', 2018)]-table[('sold', 2017)], index=table.index)
         occupancy_variance = ((table[('occupancy', 2018)] - table[('occupancy', 2017)]) / table[('occupancy', 2017)])*100
         table['%occupancy_variance'] = pd.Series(occupancy_variance, index=table.index)
-
+        # embed()
         return table
 
     def report_in_html(self, template_name):
@@ -107,9 +108,27 @@ class ReportManager:
 
 
 
+# cursor.execute("SELECT *,YEAR(report_date) as year, DAY(report_date) as day FROM pace_report WHERE report_date > %s and report_date <= %s \
+            # or report_date > %s and report_date <= %s order by report_date",
+            #                (self.date1, self.date2, self.old_date1, self.old_date2))
+            # cursor.execute("SELECT *,EXTRACT(YEAR FROM report_date) as year, EXTRACT(DAY FROM report_date) as day FROM pace_report WHERE report_date > %s and report_date <= %s \
+            #         or report_date > %s and report_date <= %s order by report_date",
+            #                (self.date1, self.date2, self.old_date1, self.old_date2))
+# sql = "EXEC [dbo].[usp_Get_Report] @startDate = '2018-08-01', @endDate = '2018-08-05', @oldStartDate = '2017-08-01', @oldEndDate = '2017-08-05'"
 
-
-
+# import pandas as pd
+#
+# # Create a Pandas dataframe from the data.
+# df = pd.DataFrame({'Data': [10, 20, 30, 20, 15, 30, 45]})
+#
+# # Create a Pandas Excel writer using XlsxWriter as the engine.
+# writer = pd.ExcelWriter('pandas_simple.xlsx', engine='xlsxwriter')
+#
+# # Convert the dataframe to an XlsxWriter Excel object.
+# df.to_excel(writer, sheet_name='Sheet1')
+#
+# # Close the Pandas Excel writer and output the Excel file.
+# writer.save()
 
 
 # https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox-0.12.5-1.msvc2015-win64.exe and set environment variable
@@ -139,8 +158,8 @@ class ReportManager:
 
 
 
-from datetime import datetime
-from flask import request
+# from datetime import datetime
+# from flask import request
 # df = pd.read_sql(data, db_conn)
 # ReportManager().excel_report()
 
@@ -175,6 +194,6 @@ from flask import request
     #
     #     return rows
 
-import reportlab
-import json
+# import reportlab
+# import json
 
